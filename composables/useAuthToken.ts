@@ -3,22 +3,20 @@
  * Handles access and refresh tokens via cookies with proper security settings
  */
 export const useAuthToken = () => {
-  const isProduction = process.env.NODE_ENV === 'production'
-
   const accessToken = useCookie('access_token', {
     maxAge: 1800, // 30 minutes
-    sameSite: 'strict',
-    secure: isProduction,
+    sameSite: 'lax',  // Changed from 'strict' to 'lax' for better compatibility
+    secure: process.env.NODE_ENV === 'production',
     path: '/',
-    httpOnly: isProduction // Better security in production
+    httpOnly: false // Allow JavaScript access to the cookie in all environments
   })
 
   const refreshToken = useCookie('refresh_token', {
     maxAge: 7 * 24 * 60 * 60, // 7 days
-    sameSite: 'strict',
-    secure: isProduction,
+    sameSite: 'lax',  // Changed from 'strict' to 'lax' for better compatibility
+    secure: process.env.NODE_ENV === 'production',
     path: '/',
-    httpOnly: isProduction // Better security in production
+    httpOnly: false // Allow JavaScript access to the cookie in all environments
   })
 
   const isAuthenticated = computed(() => !!accessToken.value)

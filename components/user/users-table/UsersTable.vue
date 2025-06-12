@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { User } from '@/types/user'
-import DataTable from "~/components/ui/data-table/DataTable.vue";
+import DataTable from "~/components/data-table/DataTable.vue";
 import {columns} from "~/components/user/users-table/columns";
 
 const api = useApi()
