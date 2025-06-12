@@ -38,6 +38,8 @@ const props = defineProps<{
 }>()
 
 const { isMobile } = useSidebar()
+
+const authStore = useAuthStore()
 </script>
 
 <template>
@@ -105,7 +107,7 @@ const { isMobile } = useSidebar()
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem @click="authStore.logout">
             <LogOut />
             Log out
           </DropdownMenuItem>

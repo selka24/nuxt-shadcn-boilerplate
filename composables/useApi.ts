@@ -3,12 +3,13 @@
  * Handles authorization with refresh tokens and global error handling
  */
 import axios, { AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import { toast } from 'vue-sonner'
 
 export const useApi = () => {
   const config = useRuntimeConfig()
-  const baseURL = config.public.apiBaseUrl || '/api/v1'
-  const { accessToken, refreshToken, setTokens, clearTokens } = useAuthToken()
-  // const toast = useToast?.()
+  const baseURL = `${config.public.apiBaseUrl}/api/v1`
+  const { setTokens, clearTokens } = useAuthToken()
+  const router = useRouter();
 
   // Create axios instance with default config
   const api = axios.create({
@@ -23,6 +24,7 @@ export const useApi = () => {
   // Request interceptor - add auth token to requests
   api.interceptors.request.use(
     (config) => {
+      const {accessToken} = useAuthToken()
       if (accessToken.value) {
         config.headers.Authorization = `Bearer ${accessToken.value}`
       }
@@ -35,6 +37,7 @@ export const useApi = () => {
   api.interceptors.response.use(
     (response) => response,
     async (error: AxiosError) => {
+      const { refreshToken } = useAuthToken()
       const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean }
 
       // Handle 401 - Token expired
@@ -43,8 +46,8 @@ export const useApi = () => {
 
         try {
           // Call your refresh token endpoint
-          const response = await axios.post(`${baseURL}/auth/refresh`, {
-            refresh_token: refreshToken.value
+          const response = await axios.post(`${baseURL}/auth/refresh-token`, {
+            refreshToken: refreshToken.value
           })
 
           // Set new tokens
@@ -65,7 +68,7 @@ export const useApi = () => {
           showErrorMessage('Your session has expired. Please log in again.')
 
           // Redirect to login page
-          navigateTo('/login')
+          await router.push('/login')
           return Promise.reject(refreshError)
         }
       }
@@ -79,11 +82,9 @@ export const useApi = () => {
 
   // Helper function to display error messages
   function showErrorMessage(message: string) {
-    // if (toast) {
-    //   toast.error(message)
-    // } else {
-      console.error('API Error:', message)
-    // }
+    toast('Something went wrong!', {
+      description: message,
+    })
   }
 
   // Extract readable error message from error object
