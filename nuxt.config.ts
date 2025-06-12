@@ -10,7 +10,8 @@ export default defineNuxtConfig({
     ],
   },
   modules: [
-    'shadcn-nuxt'
+    'shadcn-nuxt',
+    '@nuxtjs/color-mode'
   ],
   shadcn: {
     /**
@@ -22,5 +23,14 @@ export default defineNuxtConfig({
      * @default "./components/ui"
      */
     componentDir: './components/ui'
-  }
+  },
+  colorMode: {
+    classSuffix: "",
+  },
+  runtimeConfig: {
+    // Keys within public are also exposed to the client
+    public: {
+      apiBaseUrl: process.env.API_BASE_URL || 'https://api.example.com'
+    }
+  },
 })
