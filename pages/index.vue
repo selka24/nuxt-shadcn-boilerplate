@@ -21,6 +21,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '~/components/ui/sidebar'
+import UsersTable from "~/components/user/users-table/UsersTable.vue";
 </script>
 
 <template>
@@ -58,7 +59,9 @@ import {
           <div class="bg-muted/50 aspect-video rounded-xl" />
           <div class="bg-muted/50 aspect-video rounded-xl" />
         </div>
-        <div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
+        <div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min">
+          <UsersTable/>
+        </div>
       </div>
     </SidebarInset>
   </SidebarProvider>

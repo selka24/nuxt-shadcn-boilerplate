@@ -3,6 +3,7 @@ import {useAuthToken} from "~/composables/useAuthToken";
 export default defineNuxtRouteMiddleware(async (to) => {
   // Skip token validation on server-side to avoid hydration issues
   if (import.meta.server) return
+
   const { isAuthenticated } = useAuthToken()
   const authStore = useAuthStore()
 
